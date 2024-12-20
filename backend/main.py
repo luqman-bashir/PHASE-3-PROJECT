@@ -113,7 +113,6 @@ class VideoCreate(BaseModel):
     title: str
     description: str
     youtube_url: str
-    category: str
     uploaded_by: int
 
     class Config:
@@ -123,7 +122,6 @@ class VideoUpdate(BaseModel):
     title: str = None
     description: str = None
     youtube_url: str = None
-    category: str = None
 
     class Config:
         from_attributes = True  # Using from_attributes to be compatible with Pydantic V2
@@ -133,16 +131,26 @@ class VideoResponse(BaseModel):
     title: str
     description: str
     youtube_url: str
-    category: str
     uploaded_by: int
 
     class Config:
-        from_attributes = True  # Using from_attributes to be compatible with Pydantic V2
+        from_attributes = True 
 
-@app.get("/videos", response_model=List[VideoResponse])
-def get_videos(db: Session = Depends(get_db)):
-    videos = db.query(Video).all()
-    return videos
+
+def get_videos(offset: int = 0, limit: int = 10, search: str = "", db: Session = Depends(get_db)):
+    query = db.query(Video)
+
+    if search:
+        query = query.filter(Video.title.ilike(f"%{search}%"))
+
+    videos = query.offset(offset).limit(limit).all()
+
+    logger.info(f"Fetched videos: {videos}")  # Log raw video data
+
+    return [VideoResponse.from_orm(video) for video in videos]
+
+
+
 
 @app.post("/videos", response_model=VideoResponse)
 def create_video(video: VideoCreate, db: Session = Depends(get_db)):
@@ -176,18 +184,20 @@ def get_videos(offset: int = 0, limit: int = 10, search: str = "", db: Session =
 
 
 @app.put("/videos/{video_id}", response_model=VideoResponse)
-def update_video(video_id: int, video: VideoCreate, db: Session = Depends(get_db)):
+def update_video(video_id: int, video: VideoUpdate, db: Session = Depends(get_db)):
     db_video = db.query(Video).filter(Video.id == video_id).first()
     if not db_video:
         raise HTTPException(status_code=404, detail="Video not found")
     
-    # Update the video attributes
-    db_video.title = video.title
-    db_video.description = video.description
-    db_video.youtube_url = video.youtube_url
+    # Update only the provided fields
+    update_data = video.dict(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(db_video, key, value)
+
     db.commit()
-    db.refresh(db_video)  # Refresh to get the updated video data
+    db.refresh(db_video)
     return db_video
+
 
 
 

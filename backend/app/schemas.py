@@ -1,30 +1,53 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class UserBase(BaseModel):
+class UserCreate(BaseModel):
+    name: str
+    email: str
+    password: str
+
+    class Config:
+        orm_mode = True
+
+class UserResponse(BaseModel):
+    id: int
     name: str
     email: str
 
-class UserCreate(UserBase):
-    password: str
+    class Config:
+        orm_mode = True
 
-class UserResponse(UserBase):
-    id: int
+class UserUpdate(BaseModel):
+    name: Optional[str]
+    email: Optional[str]
+    password: Optional[str]
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
-class VideoBase(BaseModel):
+class VideoCreate(BaseModel):
     title: str
-    description: Optional[str] = None
+    description: str
     youtube_url: str
-
-class VideoCreate(VideoBase):
-    uploaded_by: int
-
-class VideoResponse(VideoBase):
-    id: int
     uploaded_by: int
 
     class Config:
-        from_attributes = True
+        orm_mode = True
+
+class VideoResponse(BaseModel):
+    id: int
+    title: str
+    description: str
+    youtube_url: str
+    uploaded_by: int
+
+    class Config:
+        orm_mode = True
+
+class VideoUpdate(BaseModel):
+    title: Optional[str]
+    description: Optional[str]
+    youtube_url: Optional[str]
+
+    class Config:
+        orm_mode = True

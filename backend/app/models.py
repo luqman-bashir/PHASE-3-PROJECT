@@ -19,11 +19,12 @@ class User(Base):
 
 class Video(Base):
     __tablename__ = "videos"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    title = Column(String, nullable=False)
-    description = Column(String, nullable=True)
-    youtube_url = Column(String, nullable=False)
-    uploaded_by = Column(Integer, ForeignKey("users.id"), nullable=False)
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    description = Column(String)
+    youtube_url = Column(String, unique=True, index=True)
+    uploaded_by = Column(Integer, ForeignKey("users.id"))
 
     # Relationship to User table
     owner = relationship('User', back_populates='videos')
