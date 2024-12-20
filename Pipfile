@@ -4,8 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+<<<<<<< HEAD
+=======
+sqlalchemy = "*"
+alembic = "*"
+>>>>>>> 5ac0de4b035d4f40e80011574877255f43ef5086
 
 [dev-packages]
 
 [requires]
 python_version = "3.8"
+<<<<<<< HEAD
+=======
+
+[packages.fastapi]
+extras = [ "standard",]
+>>>>>>> 5ac0de4b035d4f40e80011574877255f43ef5086
