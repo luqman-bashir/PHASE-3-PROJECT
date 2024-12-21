@@ -139,6 +139,6 @@ DELETE /videos/{id}: Delete a video.
 
 
 
-License
+### License
 
 [MIT License](https://github.com/luqman-bashir/PHASE-3-PROJECT/blob/main/LICENSE.md)
