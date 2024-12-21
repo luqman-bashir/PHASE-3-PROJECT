@@ -131,7 +131,7 @@ PUT /videos/{id}: Update video details.
 DELETE /videos/{id}: Delete a video.
 
 ### Live Server
--This is the explanation of my project[Screen recording](https://app.screencastify.com/v2/videos).
+-This is the explanation of my project[Screen recording](https://app.screencastify.com/v2/manage/videos/qqbP4J3qTnTpZusk06Zn).
 
 -View my slides[Slides](https://www.canva.com/design/DAGZ0IKhHtA/xqZMkhqa5xnm2mu-LUg2GA/view?utm_content=DAGZ0IKhHtA&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h8c7d772e6d).
 
